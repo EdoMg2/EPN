@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión - La Condesa</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5dc; }
+        .login-container { max-width: 400px; margin: 50px auto; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .login-title { font-family: 'Arial', bold; color: #800080; }
+        .btn-empleado, .btn-volver { position: absolute; top: 20px; right: 20px; background-color: transparent; border: none; color: #800080; }
+        .form-empleado { display: none; }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Georgia', serif;
+        }
+
+        body, p, a, button, input, textarea {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+    <script defer src="https://app.embed.im/snow.js"></script>
+
+</head>
+<body>
+    <div class="login-container">
+        <h2 class="text-center login-title">ELPerrillo Nieves</h2>
+        <!-- Formulario de cliente -->
+        <form id="formCliente">
+            <div class="form-group">
+                <label for="nombreCliente">Nombre</label>
+                <input type="text" class="form-control" id="nombreCliente" placeholder="Ingrese su nombre">
+            </div>
+            <div class="form-group">
+                <label for="numeroTarjeta">Número de Tarjeta</label>
+                <input type="text" class="form-control" id="numeroTarjeta" placeholder="Número de tarjeta" maxlength="16" pattern="\d*">
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label for="fechaVencimiento">Fecha de Vencimiento</label>
+                    <input type="text" class="form-control" id="fechaVencimiento" placeholder="MM/AA" maxlength="4" pattern="\d*">
+                </div>
+                <div class="col">
+                    <label for="cvv">CVV</label>
+                    <input type="text" class="form-control" id="cvv" placeholder="CVV" maxlength="3" pattern="\d*">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4">Iniciar Sesión</button>
+        </form>
+        <!-- Formulario de empleado -->
+        <form id="formEmpleado" class="form-empleado">
+            <div class="form-group">
+                <label for="idEmpleado">ID Empleado</label>
+                <input type="text" class="form-control" id="idEmpleado" placeholder="ID Empleado">
+            </div>
+            <div class="form-group">
+                <label for="contrasenaEmpleado">Contraseña</label>
+                <input type="password" class="form-control" id="contrasenaEmpleado" placeholder="Contraseña">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4">Iniciar Sesión</button>
+        </form>
+        <button class="btn btn-empleado" onclick="mostrarFormEmpleado()">Empleado</button>
+        <button class="btn btn-volver" onclick="mostrarFormCliente()">Volver</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function mostrarFormEmpleado() {
+            $('#formCliente').hide();
+            $('#formEmpleado').show();
+            $('.btn-empleado').hide();
+            $('.btn-volver').show();
+        }
+
+        function mostrarFormCliente() {
+            $('#formEmpleado').hide();
+            $('#formCliente').show();
+            $('.btn-volver').hide();
+            $('.btn-empleado').show();
+        }
+
+        $(document).ready(function() {
+            $('.btn-volver').hide();
+
+            // Manejar el envío del formulario de cliente
+            $('#formCliente').on('submit', function(e) {
+                e.preventDefault();
+                var datosCliente = {
+                    nombre: $('#nombreCliente').val(),
+
+                };
+                $.post('/login-cliente', datosCliente, function(response) {
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    }
+                }).fail(function(error) {
+                    console.log('Error:', error);
+                });
+            });
+
+            // Manejar el envío del formulario de empleado
+            $('#formEmpleado').on('submit', function(e) {
+                e.preventDefault();
+                var datosEmpleado = {
+                    idEmpleado: $('#idEmpleado').val(),
+                    contrasenaEmpleado: $('#contrasenaEmpleado').val()
+                };
+                $.post('/login-empleado', datosEmpleado, function(response) {
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    } else if (response.error) {
+                        alert(response.error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

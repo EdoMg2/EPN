@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - ElPerrillo Nieves</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">ElPerrillo Nieves</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Buscar" aria-label="Buscar">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="index.html">Cerrar sesión</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#pedidos">
+                                <span data-feather="shopping-cart"></span>
+                                Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#clientes">
+                                <span data-feather="users"></span>
+                                Clientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#productos">
+                                <span data-feather="box"></span>
+                                Productos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <h1 class="h2">Pedidos</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Sabor</th>
+                                <th>Cantidad</th>
+                                <th>Precio Total</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pedidosTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h1 class="h2 mt-4">Clientes</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Acciones</th> <!-- This is for the Edit button -->
+                            </tr>
+                        </thead>
+                        <tbody id="clientesTableBody">
+                        </tbody>
+                        
+                    </table>
+                </div>
+
+                <h1 class="h2 mt-4">Productos</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Ventas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productosTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+        feather.replace();
+    
+        $(document).ready(function() {
+            cargarPedidos();
+            cargarClientes();
+            cargarProductos();
+        });
+    
+        function cargarPedidos() {
+            $.ajax({
+                url: '/compras',
+                method: 'GET',
+                success: function(response) {
+                    const pedidos = response.compras;
+                    const pedidosTableBody = $('#pedidosTableBody');
+                    pedidosTableBody.empty();
+                    pedidos.forEach(pedido => {
+                        const row = `<tr>
+                                        <td>${pedido.CompraID}</td>
+                                        <td>${pedido.Cliente}</td>
+                                        <td>${pedido.Sabor}</td>
+                                        <td>${pedido.Cantidad}</td>
+                                        <td>${pedido.Precio}</td>
+                                        <td>${pedido.Fecha}</td>
+                                    </tr>`;
+                        pedidosTableBody.append(row);
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching orders:', error);
+                }
+            });
+        }
+
+        function cargarClientes() {
+        $.ajax({
+            url: '/clientes',
+            method: 'GET',
+            success: function(response) {
+                const clientes = response.clientes;
+                const clientesTableBody = $('#clientesTableBody');
+                clientesTableBody.empty();
+                clientes.forEach(cliente => {
+                    const row = `<tr>
+                                    <td>${cliente.ClienteID}</td>
+                                    <td>${cliente.Nombre}</td>
+                                    <td><input type="text" value="${cliente.Email}" id="email-${cliente.ClienteID}"></td>
+                                    <td><input type="text" value="${cliente.Telefono}" id="telefono-${cliente.ClienteID}"></td>
+                                    <td><button onclick="editarCliente(${cliente.ClienteID})">Edit</button></td>
+                                </tr>`;
+                    clientesTableBody.append(row);
+                });
+            },
+            error: function(error) {
+                console.error('Error fetching clients:', error);
+            }
+        });
+    }
+
+        function editarCliente(clienteID) {
+            const email = $(`#email-${clienteID}`).val();
+            const telefono = $(`#telefono-${clienteID}`).val();
+
+            $.ajax({
+                url: `/editarCliente/${clienteID}`,
+                method: 'POST',
+                data: { email, telefono },
+                success: function(response) {
+                    // Handle success (e.g., show a message or refresh the table)
+                },
+                error: function(error) {
+                    // Handle error
+                }
+            });
+        }
+
+        function cargarProductos() {
+        $.ajax({
+            url: '/productos',
+            method: 'GET',
+            success: function(response) {
+                const productos = response.productos;
+                const productosTableBody = $('#productosTableBody');
+                productosTableBody.empty();
+                productos.forEach(producto => {
+                    const row = `<tr>
+                                    <td>${producto.SaborID}</td>
+                                    <td>${producto.Nombre}</td>
+                                    <td>${producto.Descripcion}</td>
+                                    <td>${producto.Precio}</td>
+                                    <td>${producto.Ventas}</td> <!-- Make sure this matches the key in the response -->
+                                </tr>`;
+                    productosTableBody.append(row);
+                });
+            },
+            error: function(error) {
+                console.error('Error fetching products:', error);
+            }
+        });
+    }
+
+    </script>
+    
+</body>
+</html>

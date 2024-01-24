@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Nieves - La Condesa</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5dc; }
+        .container { max-width: 1200px; margin: 50px auto; }
+        .sabor-nieve { padding: 18px; border-radius: 13.5px; margin-bottom: 27px; transform: scale(0.9); }
+        .circulo-sabor { width: 120px; height: 120px; border-radius: 50%; margin: 9px auto; background-size: cover; }
+        .btn-nieve { background-color: #800080; color: white; margin: 10px; }
+        .btn-nieve:hover { background-color: #5d0075; }
+        .carrito { position: fixed; bottom: 20px; right: 20px; background-color: white; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
+        .btn-sm { padding: 4.5px 9px; font-size: 0.875rem; }
+        .bolas-numero { font-size: 1.35rem; }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Georgia', serif;
+        }
+
+        body, p, a, button, input, textarea {
+            font-family: 'Arial', sans-serif;
+        }
+        .carrito-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        #carritoModal .modal-dialog {
+            position: fixed;
+            margin: auto;
+            width: 300px;
+            height: 100%;
+            right: 0;
+            top: 0;
+            margin-right: 20px;
+        }
+        #carritoModal .modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: -20px; 
+        }
+
+        .logo-container img {
+            max-width: 100%;
+        }
+    </style>
+    <script defer src="https://app.embed.im/snow.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo de la empresa -->
+        <a href="javascript:void(0);" onclick="scrollToBottom()">
+            <h1 class="text-center mb-4 logo-container">            
+                <img src="/assets/logo.png" alt="ElPerrillo Nieves" style="max-width: 100%;">
+            </h1>
+        </a>
+        <div class="row justify-content-center">
+            <!-- Primera fila de sabores -->
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: pink;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/fresa.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Fresa</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: white;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/oreo.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Oreo</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: brown;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/chocolate.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Chocolate</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Segunda fila de sabores -->
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: mintcream;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/menta.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Menta</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: lightyellow;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/vainilla.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Vainilla</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sabor-nieve text-center" style="background-color: lightblue;">
+                    <div class="circulo-sabor" style="background-image: url('/assets/chicle.png');"></div>
+                    <p style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Chicle</p>                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-secondary btn-sm decremento">-</button>
+                        <span class="bolas-numero mx-2" style="font-family: 'Concert One', cursive;">0</span>
+                        <button class="btn btn-secondary btn-sm incremento">+</button>
+                    </div>
+                    <p class="mt-2">Bolas</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-nieve" style="font-family: 'Arial', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Agregar al Carrito</button>
+        </div>
+
+        <button type="button" class="btn btn-primary carrito-btn" data-toggle="modal" data-target="#carritoModal">
+            Ver Carrito
+        </button>
+
+        <div class="modal fade" id="carritoModal" tabindex="-1" role="dialog" aria-labelledby="carritoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="carritoModalLabel">Carrito de Compras</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="itemsCarrito">
+                        </div>
+                        <p>Total: $<span id="totalCarrito">0</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="pagarCarrito" class="btn btn-primary">Pagar</button>
+                        <button id="vaciarCarrito" class="btn btn-danger">Vaciar Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var carrito = {};
+    
+            // Incrementar y decrementar bolas
+            $('.incremento').click(function() {
+                var bolas = $(this).prev('.bolas-numero');
+                bolas.text(parseInt(bolas.text()) + 1);
+            });
+    
+            $('.decremento').click(function() {
+                var bolas = $(this).next('.bolas-numero');
+                if (parseInt(bolas.text()) > 0) {
+                    bolas.text(parseInt(bolas.text()) - 1);
+                }
+            });
+    
+            // Agregar al carrito
+            $('.btn-nieve').click(function() {
+                $('.sabor-nieve').each(function() {
+                    var sabor = $(this).find('p:first').text();
+                    var cantidad = parseInt($(this).find('.bolas-numero').text());
+                    if (cantidad > 0) {
+                        if (!carrito[sabor]) {
+                            carrito[sabor] = 0;
+                        }
+                        carrito[sabor] += cantidad;
+                        $(this).find('.bolas-numero').text('0'); // Reiniciar a 0
+                    }
+                });
+                actualizarCarrito();
+            });
+    
+            // Vaciar carrito
+            $('#vaciarCarrito').click(function() {
+                carrito = {};
+                actualizarCarrito();
+            });
+    
+            // Función para actualizar el carrito
+            function actualizarCarrito() {
+                var total = 0;
+                var itemsCarrito = '';
+                $.each(carrito, function(sabor, cantidad) {
+                    total += cantidad * 25; // Precio por bola
+                    itemsCarrito += '<p>' + sabor + ': ' + cantidad + ' bolas</p>';
+                });
+                $('#itemsCarrito').html(itemsCarrito);
+                $('#totalCarrito').text(total);
+            }
+    
+            // Pagar
+            $('#pagarCarrito').click(function() {
+                var datosCompra = {
+                    carrito: carrito,
+                    total: $('#totalCarrito').text()
+                };
+
+                console.log("Enviando compra:", datosCompra);
+
+                $.post('/procesar-compra', datosCompra, function(response) {
+                    alert('Compra realizada con éxito. Total a pagar: $' + datosCompra.total);
+                    window.location.href = 'index.html'; // Redirigir al index después de la compra
+                }).fail(function(error) {
+                    console.log('Error:', error);
+                });
+            });
+        });
+    </script>
+    <script>
+        // Espera a que la ventana cargue completamente
+        window.onload = function() {
+          // Desplaza la ventana 100 píxeles hacia abajo
+          window.scrollTo(0, 100);
+        };
+      </script>
+      <script>
+        function scrollToBottom() {
+            var offset = 650;
+            window.scrollTo({ 
+            top: document.body.scrollHeight - offset, 
+            behavior: 'smooth' 
+            });
+        }
+      </script>
+      
+</body>
+</html>
